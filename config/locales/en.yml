@@ -1,0 +1,14 @@
+en:
+  spree:
+    admin:
+      tab:
+        product_feeds: Product Feed
+        product_catalogs: Product Catalogs
+    new_feed: New Feed
+    new_product_feed: New Product Feed
+    new_product_catalog: New Product Catalog
+    edit_product_feed: Edit Product Feed
+    edit_product_catalog: Edit Product Catalog
+    select_all: Select All
+    total_of_products: Total of Products
+    product_link: Click here to go to product

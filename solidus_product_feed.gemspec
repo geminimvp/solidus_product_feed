@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'solidus_product_feed'
   s.version     = SolidusProductFeed::VERSION
-  s.summary     = 'Spree extension that provides an RSS feed for products'
-  s.description = 'A Spree extension that provides an RSS feed for products, with Google Shopper extensions'
+  s.summary     = 'Solidus extension that provides an RSS feed for products'
+  s.description = 'A Solidus extension that provides an RSS feed for products'
   s.required_ruby_version = '>= 1.8.7'
 
   s.author            = 'Joshua Nussbaum'
