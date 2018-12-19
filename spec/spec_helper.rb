@@ -1,17 +1,17 @@
-# Configure Rails Environment
-ENV["RAILS_ENV"] = "test"
-require File.expand_path("../dummy/config/environment.rb", __FILE__)
+ENV['RAILS_ENV'] = 'test'
+
+require File.expand_path('../dummy/config/environment.rb', __FILE__)
+
 require 'rspec/rails'
-require 'factory_bot_rails'
-require 'pry'
-require 'ffaker' # Required for factories.
-require 'spree/testing_support/factories'
-require 'spree/testing_support/controller_requests'
+
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
+
+require 'solidus_product_feed/factories'
 
 RSpec.configure do |config|
-  config.mock_with :rspec
-  config.use_transactional_fixtures = true
-  config.include Devise::Test::ControllerHelpers, type: :controller
-  config.include Spree::TestingSupport::ControllerRequests, type: :controller
-  config.include FactoryBot::Syntax::Methods
+  config.infer_spec_type_from_file_location!
+  config.include Spree::TestingSupport::UrlHelpers
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.use_transactional_fixtures = false
+  config.fail_fast = ENV['FAIL_FAST'] || false
 end
