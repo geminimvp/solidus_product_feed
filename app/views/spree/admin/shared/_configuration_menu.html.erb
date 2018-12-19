@@ -1,0 +1,7 @@
+<% if can?(:display, Spree::ProductFeed) %>
+  <%= settings_tab_item plural_resource_name(Spree::ProductFeed), admin_product_feeds_path %>
+<% end %>
+
+<% if can?(:display, Spree::ProductCatalog) %>
+  <%= settings_tab_item plural_resource_name(Spree::ProductCatalog), admin_product_catalogs_path %>
+<% end %>

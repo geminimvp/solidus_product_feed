@@ -1,0 +1,64 @@
+<% admin_breadcrumb(t('spree.settings')) %>
+<% admin_breadcrumb(plural_resource_name(Spree::ProductCatalog)) %>
+
+<% content_for :page_actions do %>
+  <% if can?(:create, Spree::ProductCatalog) %>
+    <li>
+      <%= link_to t('spree.new_product_catalog'), new_object_url,
+        id: 'admin_new_product_catalog_link', class: 'btn btn-primary' %>
+    </li>
+  <% end %>
+<% end %>
+
+<%= paginate @product_catalogs, theme: 'solidus_admin' %>
+
+<% if @product_catalogs.any? %>
+  <table class='index' id='listing_zones' data-hook>
+    <colgroup>
+      <col style='width: 20%' />
+      <col style='width: 10%' />
+      <col style='width: 15%' />
+      <col style='width: 10%' />
+    </colgroup>
+
+    <thead>
+      <tr data-hook='product_catalogs_header'>
+        <th>
+          <%= sort_link @search,:name,
+          Spree::ProductCatalog.human_attribute_name(:name),
+          title: 'product_catalogs_order_by_name_title' %>
+        </th>
+        <th><%= t('spree.total_of_products') %></th>
+        <th><%= Spree::ProductCatalog.human_attribute_name(:created_at) %></th>
+        <th class='actions'></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @product_catalogs.each do |product_catalog| %>
+        <tr id='<%= spree_dom_id product_catalog %>'
+          data-hook='product_catalogs_row'>
+          <td><%= product_catalog.name %></td>
+          <td><%= product_catalog.item_ids.count %></td>
+          <td><%= pretty_time(product_catalog.created_at) %></td>
+          <td class='actions'>
+            <% if can?(:update, product_catalog) %>
+              <%= link_to_edit product_catalog, no_text: true %>
+            <% end %>
+            <% if can?(:destroy, product_catalog) %>
+              <%= link_to_delete product_catalog, no_text: true %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class='no-objects-found'>
+    <%= render 'spree/admin/shared/no_objects_found',
+                 resource: Spree::ProductCatalog,
+                 new_resource_url: new_object_url %>
+  </div>
+<% end %>
+
+<%= paginate @product_catalogs, theme: 'solidus_admin' %>

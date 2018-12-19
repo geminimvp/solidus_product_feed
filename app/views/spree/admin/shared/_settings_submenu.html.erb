@@ -1,0 +1,7 @@
+<% if can?(:admin, Spree::ProductFeed) %>
+  <%= tab :product_feeds, label: :product_feeds, url: spree.admin_product_feeds_path %>
+<% end %>
+
+<% if can?(:admin, Spree::ProductCatalog) %>
+  <%= tab :product_catalogs, label: :product_catalogs, url: spree.admin_product_catalogs_path %>
+<% end %>

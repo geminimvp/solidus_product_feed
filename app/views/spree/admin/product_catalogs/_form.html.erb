@@ -1,0 +1,31 @@
+<fieldset class='form-group no-border-bottom no-border-top' data-hook="#{action}">
+  <legend align="center"><%= t("spree.#{action}") %></legend>
+
+  <div class='row'>
+    <div class='col-4' data-hook='admin_product_catalog_form_name'>
+      <%= f.field_container :name do %>
+        <%= f.label :name, class: 'required' %>
+        <%= f.text_field :name, class: 'fullwidth', required: true %>
+      <% end %>
+    </div>
+  </div>
+</fieldset>
+
+<fieldset class='form-group no-border-bottom no-border-top'>
+  <div class='row'>
+    <div class='col-12' data-hook='admin_product_catalog_form_item_ids'>
+      <% if @variants.present? %>
+        <%= render 'products_table', variants: @variants,
+          object: @object if !@product_catalog.new_record? %>
+      <% else %>
+        <div class='no-objects-found'>
+          <%= render 'spree/admin/shared/no_objects_found',
+                       resource: Spree::Product,
+                       new_resource_url: new_admin_product_url %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</fieldset>
+
+<%= f.hidden_field :store_id, value: current_store.id %>

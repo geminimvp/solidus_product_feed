@@ -1,0 +1,52 @@
+<table class='index products-table' id='listing_products'>
+  <colgroup>
+    <col style='width: 5%'>
+    <col style='width: 10%'>
+    <col style='width: 20%'>
+    <col style='width: 15%'>
+    <col style='width: 15%'>
+    <col style='width: 10%'>
+  </colgroup>
+
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= t('spree.sku') %></th>
+      <th><%= t('spree.name') %></th>
+      <th><%= Spree::Variant.model_name.human %></th>
+      <th><%= Spree::Product.model_name.human %></th>
+      <th class='align-center'>
+        <%= link_to t('spree.select_all'), '#',
+          id: 'product-list-select-all' %>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody class='variants-list'>
+    <% variants.each do |variant| %>
+      <tr id="<%= spree_dom_id variant %>" data-id='<%= variant.id %>'>
+        <td>
+          <%= render 'spree/admin/shared/image',
+                     image: variant.images.first,
+                     size: :small %>
+        </td>
+        <td><%= variant.sku %></td>
+        <td><%= variant.name %></td>
+        <td><%= variant.display_option_text %></td>
+        <td>
+          <%= link_to t('spree.product_link'),
+            admin_product_path(variant.product) %>
+        </td>
+        <td class='align-center' data-hook='admin_products_index_row_actions'>
+          <%= hidden_field_tag :product_catalog, :item_ids, value: nil,
+            multiple: true, name: 'product_catalog[item_ids][]' %>
+          <%= check_box_tag :product_catalog, :item_ids,
+            object.selected?(variant.id),
+            value: variant.id,
+            class: 'item_ids',
+            name: 'product_catalog[item_ids][]' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

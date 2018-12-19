@@ -1,0 +1,15 @@
+<% admin_layout 'full-width' %>
+
+<% admin_breadcrumb(t('spree.settings')) %>
+<% admin_breadcrumb(link_to plural_resource_name(Spree::ProductCatalog), spree.admin_product_catalogs_path) %>
+<% admin_breadcrumb(@product_catalog.name) %>
+
+<% content_for :page_actions do %>
+<% end %>
+
+<%= render partial: 'spree/shared/error_messages', locals: { target: @product_catalog } %>
+
+<%= form_for [:admin, @product_catalog] do |f| %>
+  <%= render partial: 'form', locals: { f: f, action: 'edit_product_catalog' } %>
+  <%= render partial: 'spree/admin/shared/edit_resource_links' %>
+<% end %>

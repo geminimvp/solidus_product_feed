@@ -1,0 +1,36 @@
+<fieldset class='form-group no-border-bottom no-border-top' data-hook="#{action}">
+  <legend align="center"><%= t("spree.#{action}") %></legend>
+
+  <div class='row'>
+    <div class='col-4' data-hook='admin_product_feed_name'>
+      <%= f.field_container :name do %>
+        <%= f.label :name, class: 'required' %>
+        <%= f.text_field :name, class: 'fullwidth', required: true %>
+      <% end %>
+    </div>
+
+    <div class='col-4' data-hook='admin_product_feed_product_catalog_id'>
+      <%= f.field_container :product_catalog_id do %>
+        <%= f.label :product_catalog_id %><br />
+        <%= f.select :product_catalog_id,
+          options_from_collection_for_select(@product_catalogs, :id, :name, @object.product_catalog_id),
+          { prompt: '' },
+          class: 'fullwidth select2',
+          required: true if @product_catalogs.any? %>
+      <% end %>
+
+      <span>
+        <%= link_to t('spree.new_product_catalog'), new_admin_product_catalog_path %>
+      </span>
+    </div>
+
+    <div class='col-4' data-hook='admin_product_feed_url'>
+      <%= field_container :url do %>
+        <%= label_tag :url %><br />
+        <%= input_field_tag :url, "#{current_store.url}/products.rss", class: 'fullwidth', readonly: true %>
+      <% end %>
+    </div>
+  </div>
+</fieldset>
+
+<%= f.hidden_field :store_id, value: current_store.id %>
