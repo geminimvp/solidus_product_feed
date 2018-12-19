@@ -1,7 +1,5 @@
 # encoding: UTF-8
-lib = File.expand_path('../lib/', __FILE__)
-$:.unshift lib unless $:.include?(lib)
-
+$:.push File.expand_path('../lib', __FILE__)
 require 'solidus_product_feed/version'
 
 Gem::Specification.new do |s|
@@ -12,20 +10,28 @@ Gem::Specification.new do |s|
   s.description = 'A Solidus extension that provides an RSS feed for products'
   s.required_ruby_version = '>= 1.8.7'
 
-  s.author            = 'Joshua Nussbaum'
-  s.email             = 'joshnuss@gmail.com'
+  s.author      = 'Joshua Nussbaum'
+  s.email       = 'joshnuss@gmail.com'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.require_path = 'lib'
-  s.requirements << 'none'
+  s.require_path  = 'lib'
+  s.requirements  = 'none'
 
-  s.add_runtime_dependency 'solidus_backend', [">= 1.0", "< 3"]
+  solidus_version = ['>= 2.0', '< 3']
+  s.add_dependency 'solidus', solidus_version
+  s.add_dependency 'solidus_support'
+  s.add_dependency 'deface'
 
-  s.add_development_dependency 'rspec-rails', '~> 3.4'
-  s.add_development_dependency 'rubocop', '~> 0.39.0'
-  s.add_development_dependency 'factory_bot_rails'
-  s.add_development_dependency 'pry'
+  s.add_development_dependency 'capybara', '~> 2.18'
+  s.add_development_dependency 'poltergeist'
+  s.add_development_dependency 'coffee-rails'
+  s.add_development_dependency 'sass-rails'
+  s.add_development_dependency 'database_cleaner'
+  s.add_development_dependency 'factory_bot'
+  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'rubocop', '0.43.0'
+  s.add_development_dependency 'rubocop-rspec', '1.4.0'
+  s.add_development_dependency 'simplecov'
   s.add_development_dependency 'ffaker'
-  s.add_development_dependency 'sqlite3'
 end
