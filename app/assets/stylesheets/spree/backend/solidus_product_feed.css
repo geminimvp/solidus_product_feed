@@ -1,0 +1,22 @@
+.product_list_variant {
+  display: none;
+  width: 100%;
+  height: 20%;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+.product_list_variant:hover {
+}
+
+.product_list_variant td img {
+  max-width: 50%;
+}
+
+.active {
+  display: table-row;
+}
+
+.variant_sku {
+  margin-left: 10px;
+}
