@@ -1,7 +1,7 @@
 Deface::Override.new(
   virtual_path: 'spree/admin/shared/_settings_sub_menu',
-  name: 'submenu_admin_configurations_menu',
+  name: 'product_feed_submenu_admin_configurations_menu',
   insert_bottom: "[data-hook='admin_settings_sub_tabs']",
-  disabled: true,
-  partial: 'spree/admin/shared/settings_submenu'
+  disabled: false,
+  partial: 'spree/admin/shared/product_feed_settings_submenu'
 )
