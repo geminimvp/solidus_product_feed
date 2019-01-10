@@ -4,6 +4,8 @@ en:
       tab:
         product_feeds: Product Feed
         product_catalogs: Product Catalogs
+      product_catalog:
+        new: New Product Catalog
     new_feed: New Feed
     new_product_feed: New Product Feed
     new_product_catalog: New Product Catalog
