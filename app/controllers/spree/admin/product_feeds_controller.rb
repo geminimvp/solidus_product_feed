@@ -1,10 +1,10 @@
 module Spree
   module Admin
     class ProductFeedsController < ResourceController
-      before_action :load_data, only: [:index, :edit, :new]
+      before_action :load_data, only: [:index, :edit, :new, :create]
 
       def index
-        if model_class.default
+        if model_class.default.present?
           redirect_to edit_admin_product_feed_path(@product_feeds.first)
         else
           redirect_to new_admin_product_feed_path
@@ -12,7 +12,7 @@ module Spree
       end
 
       def new
-        if model_class.default
+        if model_class.default.present?
           redirect_to edit_admin_product_feed_path(model_class.default)
         else
           render :new
