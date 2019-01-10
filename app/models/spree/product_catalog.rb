@@ -1,5 +1,5 @@
 module Spree
-  class ProductCatalog < Spree::Base
+  class ProductCatalog < ActiveRecord::Base
     serialize :item_ids, Array
 
     belongs_to :store
