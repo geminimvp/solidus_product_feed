@@ -1,6 +1,12 @@
 module Spree
   module Admin
     module ProductCatalogsHelper
+      def set_product_feed_image(variant, product_catalog)
+        return variant.images.first unless variant.product_feed_image
+
+        variant.product_feed_image
+      end
+
       def product_catalog_options(variant, product_catalog)
         attrs = JSON.parse(variant.to_json)
 

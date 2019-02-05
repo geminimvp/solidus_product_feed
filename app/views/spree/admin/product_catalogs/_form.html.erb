@@ -13,6 +13,8 @@
   <fieldset class='form-group no-border-bottom no-border-top' data-hook='variants_list_selection'>
     <div class='row'>
       <div class='col-12' data-hook='admin_product_catalog_form_item_ids'>
+        <%= paginate @variants, theme: "solidus_admin" %>
+
         <% if @variants.present? %>
           <% cache [I18n.locale, @object, @variants] do %>
             <table class='index products-table' id='listing_products'>
@@ -55,20 +57,23 @@
                     </td>
                     <td class='align-center'>
                       <%= f.check_box :item_ids, {
-                        checked: @product_catalog.selected?(variant.id),
-                        class: "item_ids"
+                          checked: @product_catalog.selected?(variant.id),
+                          class: "item_ids",
+                          id: "item-ids"
                         },
                         variant.id %>
                     </td>
                     <td class='actions align-center' data-hook='admin_product_catalog_actions'>
                       <%= link_to t("spree.edit"),
-                          edit_admin_product_catalog_product_image_path(@product_catalog, variant.product, set_product_feed_image(variant, @product_catalog)), class: "edit btn btn-default btn-rounded" if variant.images.any? %>
+                          edit_admin_product_catalog_variant_image_path(@product_catalog, variant, set_product_feed_image(variant, @product_catalog)), class: "edit btn btn-default btn-rounded" if variant.images.any? %>
                     </td>
                   </tr>
                 <% end %>
               </tbody>
             </table>
           <% end %>
+
+          <%= paginate @variants, theme: "solidus_admin" %>
         <% else %>
           <div class='no-objects-found'>
             <%= render "spree/admin/shared/no_objects_found",
@@ -82,3 +87,5 @@
 <% end %>
 
 <%= f.hidden_field :store_id, value: current_store.id %>
+<%= f.hidden_field :item_ids, value: @product_catalog.item_ids.to_s %>
+<%= hidden_field_tag :page, params[:page] %>

@@ -22,7 +22,7 @@ describe Spree::Admin::ProductCatalogsController do
       {
         product_catalog: {
           name: 'Test',
-          item_ids: [variant.id],
+          item_ids: [variant.id].to_s,
           store_id: store.id
         }
       }

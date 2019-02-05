@@ -1,10 +1,41 @@
 Spree.ready(function() {
   'use strict';
 
+  $('.item_ids').on('change', function(e) {
+    e.preventDefault();
+
+    var $el = $(e.currentTarget);
+    var $itemIds = $('#product_catalog_item_ids');
+    var ids = JSON.parse($itemIds.val());
+
+    if ($el.prop('checked') === true) {
+      ids.push($el.val());
+    } else {
+      var idIndex = null;
+      $.each(ids, function(index, value) {
+        if (value === $el.val()) {
+          idIndex = index;
+        }
+      })
+      ids.splice(idIndex, 1);
+    }
+
+    $itemIds.val(JSON.stringify(ids));
+  })
+
   var selectUnselectAll = function(selected) {
+    var ids = [];
+    var $itemIds = $('#product_catalog_item_ids');
+
     $('.item_ids').map(function(i, item) {
       $(item).prop('checked', selected);
+
+      if (selected === true) {
+        ids.push($(item).val());
+      }
     })
+
+    $itemIds.val(JSON.stringify(ids));
   };
 
   var allChecked = function() {
@@ -45,7 +76,7 @@ Spree.ready(function() {
   });
 
   $('#product-list-select-all').on('click', function(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     if (allChecked() === true) {
       selectUnselectAll(false);

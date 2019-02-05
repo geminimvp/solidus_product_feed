@@ -22,17 +22,30 @@ module Spree
       end
 
       def load_variants
-        @variants ||= Spree::Variant.all
+        @variants = Spree::Config.variant_search_class.new(params[:variant_search_term], scope: variant_scope).results
+        @variants = @variants.includes(:images, stock_items: :stock_location, product: :variant_images)
+        @variants = @variants.includes(option_values: :option_type)
+        @variants = @variants.page(params[:page]).per(params[:per_page] || Spree::Config[:admin_variants_per_page])
       end
 
       def location_after_save
-        edit_admin_product_catalog_path(@object)
+        if params[:page].present?
+          edit_admin_product_catalog_path(@object, page: params[:page])
+        else
+          edit_admin_product_catalog_path(@object)
+        end
       end
 
       def permitted_resource_params
-        params[:product_catalog][:item_ids] &&
-          params[:product_catalog][:item_ids].delete_if(&:blank?)
+        if params[:product_catalog][:item_ids]
+          params[:product_catalog][:item_ids] = JSON.parse(params[:product_catalog][:item_ids])
+        end
+
         super
+      end
+
+      def variant_scope
+        Spree::Variant.accessible_by(current_ability, :read)
       end
 
       def model_class
