@@ -5,15 +5,12 @@ module Spree
     belongs_to :product_catalog
 
     has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::Image'
+    has_one :overlay_image, dependent: :destroy, class_name: 'Spree::Image', foreign_key: :overlay_image_id
 
     validates :name, presence: true, uniqueness: true
 
     def self.default
       where(store: Spree::Store.default).where.not(product_catalog_id: nil).first
-    end
-
-    def overlay_image
-      Spree::Image.where(id: overlay_image_id).first
     end
 
     def color
