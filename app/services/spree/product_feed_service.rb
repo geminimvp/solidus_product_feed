@@ -91,7 +91,13 @@ module Spree
     end
 
     def availability
-      product.try(:total_on_hand).to_i > 0 ? 'in stock' : 'out of stock'
+      total_on_hand = product.try(:total_on_hand)
+
+      if total_on_hand == Float::INFINITY || total_on_hand.to_i > 0
+        'in stock'
+      else
+        'out of stock'
+      end
     end
 
     def image_link

@@ -107,6 +107,14 @@ describe Spree::ProductFeedService do
 
       it { is_expected.to eq('in stock') }
     end
+
+    context 'when inventory is not tracked' do
+      before do
+        variant.update_attributes(track_inventory: false)
+      end
+
+      it { is_expected.to eq('in stock') }
+    end
   end
 
   describe '#image_link' do
