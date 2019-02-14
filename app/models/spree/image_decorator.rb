@@ -3,8 +3,6 @@ Spree::Image.class_eval do
                     styles: proc { |attachment| attachment.instance.styles },
                     default_style: :product,
                     default_url: 'noimage/:style.png',
-                    url: '/spree/products/:id/:style/:basename.:extension',
-                    path: ':rails_root/public/spree/products/:id/:style/:basename.:extension',
                     convert_options: { mini: '-strip -auto-orient -colorspace sRGB',
                                        small: '-strip -auto-orient -colorspace sRGB',
                                        product: '-strip -auto-orient -colorspace sRGB',
