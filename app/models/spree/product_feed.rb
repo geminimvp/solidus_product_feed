@@ -9,7 +9,7 @@ module Spree
     validates :name, presence: true, uniqueness: true
 
     def self.default
-      where(store: Spree::Store.default).where.not(product_catalog_id: nil).first
+      where(store: Spree::Store.default).where.not(product_catalog_id: nil).first if table_exists?
     end
 
     def overlay_image
