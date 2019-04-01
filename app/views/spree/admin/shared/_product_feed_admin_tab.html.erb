@@ -1,0 +1,13 @@
+<li class="menu-item">
+  <%= link_to "#",
+              class: "dropdown-toggle",
+              data: { toggle: "collapse", target: "#tab-product-feed" },
+              aria: { expanded: "false",
+                      controls: "tab-product-feed" } do %>
+    <i class="icon menu-icon menu-icon-cms mr-2"></i>
+    <%= I18n.t(:product_feeds, scope: [:spree, :admin, :tab]) %>
+  <% end %>
+</li>
+<div id="tab-product-feed" class="submenu collapse">
+  <%= render partial: 'spree/admin/shared/product_feed_sub_menu' %>
+</div>

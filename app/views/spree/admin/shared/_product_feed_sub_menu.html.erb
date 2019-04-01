@@ -1,0 +1,8 @@
+<ul data-hook="admin_product_feeds_sub_tabs">
+  <li class="submenu-item <%= mark_as_active('admin/product_catalogs', 'active') %>">
+    <%= link_to I18n.t(:product_catalogs, scope: [:spree, :admin, :tab]), spree.admin_product_catalogs_path %>
+  </li>
+  <li class="submenu-item <%= mark_as_active('admin/product_feeds', 'active') %>">
+    <%= link_to I18n.t(:product_feeds, scope: [:spree, :admin, :tab]), spree.admin_product_feeds_path %>
+  </li>
+</ul>
