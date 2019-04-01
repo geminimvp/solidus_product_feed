@@ -1,13 +1,19 @@
 en:
   spree:
+
     admin:
       tab:
-        product_feeds: Product Feed
+        product_feed: Product Feed
+        product_feeds: Product Feeds
         product_catalogs: Product Catalogs
         product_feed_images: Product Feed Images
       tab_description:
         product_feed_images: Manage Product Feed Images
         product_catalog_images: Manage Product Images
+      product_catalog:
+        new: New Product Catalog
+      product_feed:
+        new: New Product Feed
       product_feed_image:
         success_uploaded: The image was updated successfully
         error_uploaded: Something went wrong, please try again
@@ -22,6 +28,7 @@ en:
     select_all: Select All
     total_of_products: Total of Products
     product_link: Click here to go to product
+    product_catalog: Product Catalog
 
     product_feed:
       affine_clamp: Affine Clamp

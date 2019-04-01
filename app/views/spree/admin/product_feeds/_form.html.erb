@@ -24,8 +24,8 @@
 
     <div class='col-4' data-hook='admin_product_feed_url'>
       <%= f.field_container :url do %>
-        <%= f.label :url %><br />
-        <%= text_field_tag :url, "#{current_store.url}/products.rss", class: 'fullwidth', readonly: true, disabled: true %>
+        <%= f.label :url, 'URL' %><br />
+        <%= text_field_tag :url, "#{current_store.url}/products.rss?name=#{name_to_url(@product_feed.name) if @product_feed.persisted?}", class: 'fullwidth', readonly: true, disabled: true %>
       <% end %>
     </div>
   </div>

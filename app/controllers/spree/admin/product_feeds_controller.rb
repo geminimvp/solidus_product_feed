@@ -8,8 +8,8 @@ module Spree
         params[:q][:s] ||= 'name asc'
         @search = super.ransack(params[:q])
         @product_feeds = @search.result.
-                          page(params[:page]).
-                          per(params[:per_page])
+                         page(params[:page]).
+                         per(params[:per_page])
       end
 
       private

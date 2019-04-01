@@ -121,7 +121,7 @@ describe Spree::ProductFeedService do
     subject { service.image_link }
 
     context 'when the variant has images' do
-      it { is_expected.to eq('http://example.com/spree/products/2/product_feed/hams.png') }
+      it { is_expected.to match('/hams.png') }
     end
 
     context 'when the product has images' do
@@ -130,7 +130,7 @@ describe Spree::ProductFeedService do
         allow_any_instance_of(Spree::Product).to receive(:images).and_return([product_image])
       end
 
-      it { is_expected.to eq('http://example.com/spree/products/1/product_feed/hams.png') }
+      it { is_expected.to match('/hams.png') }
     end
 
     context "when the product an variant don't have images" do

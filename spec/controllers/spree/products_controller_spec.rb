@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Spree::ProductsController do
   let!(:store) { create(:store) }
+  let!(:user) { create(:user) }
   let(:product) { create(:product, name: '2 Hams', price: 20.00) }
   let(:variant) { create(:variant, product: product) }
   let!(:product_catalog) do
@@ -14,15 +15,29 @@ describe Spree::ProductsController do
            store: store)
   end
 
-  context 'GET #index' do
-    subject { get :index, params: { format: 'rss' } }
+  before do
+    allow(controller).to receive_messages(try_spree_current_user: user)
+    expect_any_instance_of(Spree::Config.searcher_class).to receive(:current_user=).with(user)
+  end
 
-    it 'returns the http correct code' do
-      is_expected.to have_http_status :ok
+  context 'GET #index' do
+    it 'returns html view' do
+      get :index
+      expect(response.status).to eq(200)
     end
 
     it 'returns the correct content type' do
-      subject
+      get :index
+      expect(response.content_type).to eq 'text/html'
+    end
+
+    it 'returns xml view' do
+      get :index, params: { format: 'rss' }
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns the correct content type' do
+      get :index, params: { feed: 'test', format: 'rss' }
       expect(response.content_type).to eq 'application/rss+xml'
     end
   end

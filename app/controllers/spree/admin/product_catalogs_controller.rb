@@ -2,7 +2,7 @@ module Spree
   module Admin
     class ProductCatalogsController < ResourceController
       before_action :load_data, except: [:index]
-      before_action :load_variants, only: [:edit]
+      before_action :variants, only: [:edit]
 
       include Spree::Admin::ProductCatalogsHelper
 
@@ -21,7 +21,7 @@ module Spree
         @product_catalogs = Spree::ProductCatalog.where(store: current_store).order(:name)
       end
 
-      def load_variants
+      def variants
         @variants = Spree::Config.variant_search_class.new(params[:variant_search_term], scope: variant_scope).results
         @variants = @variants.includes(:images, stock_items: :stock_location, product: :variant_images)
         @variants = @variants.includes(option_values: :option_type)
