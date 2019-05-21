@@ -1,19 +1,19 @@
-Spree::ProductsController.class_eval do
-  before_action(only: :index) do |controller|
-    if controller.request.format.rss?
-      load_feed_products
+Spree::ProductsController.prepend(Module.new do
+  class << self
+    def prepended(klass)
+      klass.respond_to :rss, :xml, only: :index
     end
   end
 
   def index
+    load_feed_products if request.format.rss? || request.format.xml?
     respond_to do |format|
       if product_feed
         format.rss { render inline: xml.generate, layout: false }
       else
         format.rss { redirect_to action: 'index' }
       end
-
-      format.html
+      format.html { super }
     end
   end
 
@@ -41,4 +41,4 @@ Spree::ProductsController.class_eval do
   def xml
     @xml ||= Spree::Feeds::XML.new(@feed_products, current_store)
   end
-end
+end)
