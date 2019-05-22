@@ -26,4 +26,15 @@ describe Spree::ProductsController do
       expect(response.content_type).to eq 'application/rss+xml'
     end
   end
+  
+  context 'GET #index as html' do
+    it 'is successful' do
+      get :index
+      
+      expect(response).to be_successful
+      expect(assigns(:magic)).to eq("more magic")
+    end
+  end
+  
+  
 end
