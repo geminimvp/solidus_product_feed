@@ -101,8 +101,23 @@ module Spree
     end
 
     def image_link
-      return "#{store.url}#{variant.try(:images).first.try(:attachment).try(:url, :product_feed)}" if variant.images.any?
-      return "#{store.url}#{product.try(:images).first.try(:attachment).try(:url, :product_feed)}" if product.images.any?
+      if image_link_base =~ /\Ahttp/
+        return image_link_base
+      elsif image_link_base.present?
+        return "#{store.url}#{image_link_base}"
+      end
+    end
+
+    def image_link_base
+      if variant.images.any?
+        item_product_feed_image_link(variant)
+      elsif product.images.any?
+        item_product_feed_image_link(product)
+      end
+    end
+
+    def item_product_feed_image_link(item)
+      item.try(:images).first.try(:attachment).try(:url, :product_feed)
     end
   end
 end
