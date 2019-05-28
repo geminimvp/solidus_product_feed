@@ -119,7 +119,13 @@ describe Spree::ProductFeedService do
 
   describe '#image_link' do
     subject { service.image_link }
-    let(:image_path_regex) { /http:\/\/example.com\/system\/spree\/images\/attachments\/\d*\/\d*\/\d*\/product_feed\/hams.png/ }
+
+    let(:expected_image_path) {
+      'http://example.com/system/spree/images/attachments/\d*/\d*/\d*/product_feed/hams.png'
+    }
+    let(:image_path_regex) {
+      %r|\A#{expected_image_path}\Z|
+    }
 
     context 'when the variant has images' do
       it { is_expected.to match(image_path_regex) }
