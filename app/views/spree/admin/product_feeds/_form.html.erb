@@ -31,7 +31,7 @@
   </div>
 </fieldset>
 
-<% @product_feed.persisted? %>
+<% if @product_feed.persisted? %>
   <fieldset class='form-group no-border-bottom no-border-top' data-hook='edit_product_feed_images'>
     <div class='row'>
       <div class='col-4' data-hook='image_color_fill'>
