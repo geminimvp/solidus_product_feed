@@ -26,6 +26,19 @@ describe Spree::ProductsController do
       expect(response.content_type).to eq 'application/rss+xml'
     end
 
+    context 'as XML' do
+      subject { get :index, params: { format: 'xml' } }
+
+      it 'returns the correct http code' do
+        is_expected.to have_http_status :ok
+      end
+
+      it 'returns the correct content type' do
+        subject
+        expect(response.content_type).to eq 'application/xml'
+      end
+    end
+
     context 'GET #index as html' do
       it 'is successful' do
         get :index
