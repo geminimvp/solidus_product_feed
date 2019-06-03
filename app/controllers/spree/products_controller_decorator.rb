@@ -6,12 +6,14 @@ Spree::ProductsController.prepend(Module.new do
   end
 
   def index
-    load_feed_products if request.format.rss? || request.format.xml?
+    load_feed_products if (request.format.rss? || request.format.xml?)
     respond_to do |format|
       if product_feed
         format.rss { render inline: xml.generate, layout: false }
+        format.xml { render inline: xml.generate, layout: false }
       else
         format.rss { redirect_to action: 'index' }
+        format.xml { redirect_to action: 'index' }
       end
       format.html { super }
     end
