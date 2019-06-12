@@ -12,8 +12,8 @@ module Spree
             xml.title store.name
             xml.link store.url
             xml.description "Find out about new products on http://#{store.url} first!"
-
-            items.each do |item|
+            variants.includes(variants_includes).find_each(batch_size: 100) do |variant|
+              item = Spree::ProductFeedService.new(variant, store)
               xml.item do
                 xml.tag! 'g:id', item.id
                 xml.tag! 'g:title', item.title
