@@ -4,10 +4,10 @@ module Spree
 
     attr_reader :product, :variant, :store
 
-    def initialize(variant)
+    def initialize(variant, store = Spree::Store.default)
       @variant = variant
       @product = variant.product
-      @store = Spree::Store.default
+      @store = store
     end
 
     def id
@@ -27,54 +27,39 @@ module Spree
     end
 
     def url
-      "#{Spree::Store.default.url}/#{product.slug}"
+      "#{store.url}/#{product.slug}"
     end
 
     def color
-      option_type = Spree::OptionType.find_by(presentation: 'Color')
-      variant.option_values.find_by(option_type_id: option_type.try(:id)).
-        try(:presentation).to_s
+      option_value_by_type('Color')
     end
 
     def gender
-      property = Spree::Property.find_by(name: 'Gender')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value).to_s.downcase
+      property_value_by_name('Gender').to_s.downcase
     end
 
     def size
-      property = Spree::Property.find_by(name: 'Size')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value).to_s
+      option_value_by_type('Size')
     end
 
     def brand
-      property = Spree::Property.find_by(name: 'Brand')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value) || store.name
+      taxon_name_by_taxonomy('Brand')
     end
 
     def material
-      property = Spree::Property.find_by(name: 'Material')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value).to_s.downcase
+      property_value_by_name('Material').to_s.downcase
     end
 
     def google_product_category
-      property = Spree::Property.find_by(name: 'Google Product Category')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value).to_s
+      property_value_by_name('Google Product Category').to_s
     end
 
     def mpn
-      property = Spree::Property.find_by(name: 'MPN')
-      product.product_properties.find_by(property_id: property.try(:id)).
-        try(:value).to_s.downcase
+      property_value_by_name('MPN').to_s.downcase
     end
 
     def product_type
-      property = Spree::Property.find_by(name: 'Type')
-      product.product_properties.find_by(property_id: property.try(:id)).try(:value)
+      property_value_by_name('Type').to_s
     end
 
     # Must be "new", "refurbished", or "used".
@@ -87,13 +72,11 @@ module Spree
     end
 
     def price
-      Spree::Money.new(product.try(:price))
+      Spree::Money.new(variant.price)
     end
 
     def availability
-      total_on_hand = product.try(:total_on_hand)
-
-      if total_on_hand == Float::INFINITY || total_on_hand.to_i > 0
+      if variant.in_stock?
         'in stock'
       else
         'out of stock'
@@ -118,6 +101,26 @@ module Spree
 
     def item_product_feed_image_link(item)
       item.try(:images).first.try(:attachment).try(:url, :product_feed)
+    end
+
+    private
+
+    def option_value_by_type(option_type_presentation)
+      variant.option_values.detect { |ov|
+        ov.option_type.presentation == option_type_presentation
+      }.try(:presentation).to_s
+    end
+
+    def taxon_name_by_taxonomy(taxonomy_name)
+      product.taxons.detect { |taxon|
+        taxon.taxonomy.name == taxonomy_name
+      }.try(:name).to_s
+    end
+
+    def property_value_by_name(property_name)
+      product.product_properties.detect { |p_prop|
+        p_prop.property.name == property_name
+      }.try(:value)
     end
   end
 end

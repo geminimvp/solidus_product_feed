@@ -8,7 +8,8 @@ module Spree
         ::CSV.generate do |csv|
           csv << header_node
 
-          items.each do |item|
+          variants.includes(variants_includes).find_each(batch_size: 100) do |variant|
+            item = Spree::ProductFeedService.new(variant)
             csv << item_node(item)
           end
         end
