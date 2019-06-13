@@ -100,7 +100,7 @@ module Spree
     end
 
     def item_product_feed_image_link(item)
-      item.try(:images).first.try(:attachment).try(:url, :product_feed)
+      item.try(:images).first.try(:attachment).try(:url, :large)
     end
 
     private
