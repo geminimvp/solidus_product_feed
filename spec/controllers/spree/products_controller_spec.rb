@@ -14,6 +14,12 @@ describe Spree::ProductsController do
            store: store)
   end
 
+  before do
+    # This attribute is added by the `solidus_asset_variant_options`
+    # extension which isn't an explicit dependency of this gem.
+    allow_any_instance_of(Spree::Variant).to receive(:variant_image_images).and_return([])
+  end
+
   context 'GET #index' do
     subject { get :index, params: { format: 'rss' } }
 
