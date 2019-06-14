@@ -5,12 +5,6 @@ describe Spree::ProductFeedService do
   let!(:gender) do
     create(:property, name: 'Gender', presentation: 'Gender')
   end
-  let!(:size) do
-    create(:property, name: 'Size', presentation: 'Size')
-  end
-  let!(:brand) do
-    create(:property, name: 'Brand', presentation: 'Brand')
-  end
   let!(:material) do
     create(:property, name: 'Material', presentation: 'Material')
   end
@@ -19,34 +13,48 @@ describe Spree::ProductFeedService do
   end
   let!(:mpn) { create(:property, name: 'MPN') }
   let!(:type) { create(:property, name: 'Type') }
-  let!(:option_type) { create(:option_type, name: 'tshirt-color', presentation: 'Color') }
-  let!(:option_value) { create(:option_value, name: 'Blue', presentation: 'Blue', option_type: option_type) }
+  let!(:color_option_type) {
+    create(:option_type, name: 'tshirt-color', presentation: 'Color')
+  }
+  let!(:color_option_value) {
+    create(:option_value, name: 'Blue', presentation: 'Blue', option_type: color_option_type)
+  }
+  let!(:size_option_type) {
+    create(:option_type, name: 'tshirt-size', presentation: 'Size')
+  }
+  let!(:size_option_value) {
+    create(:option_value, name: 'Large', presentation: 'L', option_type: size_option_type)
+  }
+
   let!(:product_properties) do
     create(:product_property, product: product, property: gender, value: 'Unisex')
-    create(:product_property, product: product, property: size, value: 'L')
-    create(:product_property, product: product, property: brand, value: 'EngineCommerce')
     create(:product_property, product: product, property: material, value: 'Cotton')
     create(:product_property, product: product, property: google_product_category, value: 'Apparel & Accessories > Clothing')
     create(:product_property, product: product, property: mpn, value: '1')
     create(:product_property, product: product, property: type, value: 'Apparel & Accessories > Clothing')
   end
+
   let(:product) do
     create(:product,
            name: '2 Hams 20 Dollars',
            description: 'As seen on TV!',
-           option_types: [option_type])
+           option_types: [size_option_type, color_option_type])
   end
+
   let!(:product_image) do
     product.master.images.create!(attachment_file_name: 'hams.png')
   end
+
   let(:variant) do
     create(:variant,
            product: product,
-           option_values: [option_value])
+           option_values: [size_option_value, color_option_value])
   end
+
   let!(:variant_image) do
     variant.images.create!(attachment_file_name: 'hams.png')
   end
+
   let(:service) { described_class.new(variant) }
 
   describe '#id' do
@@ -121,7 +129,7 @@ describe Spree::ProductFeedService do
     subject { service.image_link }
 
     let(:expected_image_path) {
-      'http://example.com/system/spree/images/attachments/\d*/\d*/\d*/product_feed/hams.png'
+      'http://example.com/system/spree/images/attachments/\d*/\d*/\d*/large/hams.png'
     }
     let(:image_path_regex) {
       %r|\A#{expected_image_path}\Z|
@@ -165,7 +173,19 @@ describe Spree::ProductFeedService do
   describe '#brand' do
     subject { service.brand }
 
-    it { is_expected.to eq('EngineCommerce') }
+    context 'when product has a brand' do
+      let(:brand_taxonomy) { create(:taxonomy, name: 'Brand') }
+      let(:brand_taxon) {
+        create(:taxon, name: 'EngineCommerce', taxonomy: brand_taxonomy)
+      }
+
+      before do
+        product.taxons << brand_taxon
+      end
+
+      it { is_expected.to eq('EngineCommerce') }
+    end
+
   end
 
   describe '#material' do
