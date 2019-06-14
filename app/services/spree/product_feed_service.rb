@@ -27,7 +27,14 @@ module Spree
     end
 
     def url
-      "#{store.url}/#{product.slug}"
+      base_url = "#{store.url}/#{product.slug}"
+
+      if base_url =~ /\Ahttp/
+        base_url
+      else
+        "https://#{base_url}"
+      end
+
     end
 
     def color
@@ -87,7 +94,7 @@ module Spree
       if image_link_base =~ /\Ahttp/
         return image_link_base
       elsif image_link_base.present?
-        return "#{store.url}#{image_link_base}"
+        return "https://#{store.url}#{image_link_base}"
       end
     end
 

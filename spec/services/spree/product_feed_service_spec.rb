@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Spree::ProductFeedService do
-  let!(:store) { create(:store, default: true, url: 'http://example.com') }
+  let(:store_url) { 'example.com' }
+  let!(:store) { create(:store, default: true, url: store_url) }
   let!(:gender) do
     create(:property, name: 'Gender', presentation: 'Gender')
   end
@@ -86,7 +87,11 @@ describe Spree::ProductFeedService do
   describe '#url' do
     subject { service.url }
 
-    it { is_expected.to eq("#{store.url}/#{product.slug}") }
+    it { is_expected.to eq("https://#{store.url}/#{product.slug}") }
+    context 'when store URL already includes protocol' do
+      let(:store_url) { 'https://example.com' }
+      it { is_expected.to eq("#{store.url}/#{product.slug}") }
+    end
   end
 
   describe '#condition' do
@@ -129,7 +134,7 @@ describe Spree::ProductFeedService do
     subject { service.image_link }
 
     let(:expected_image_path) {
-      'http://example.com/system/spree/images/attachments/\d*/\d*/\d*/large/hams.png'
+      'https://example.com/system/spree/images/attachments/\d*/\d*/\d*/large/hams.png'
     }
     let(:image_path_regex) {
       %r|\A#{expected_image_path}\Z|
