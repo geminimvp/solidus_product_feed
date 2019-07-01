@@ -180,8 +180,13 @@ describe Spree::ProductFeedService do
 
     context 'when product has a brand' do
       let(:brand_taxonomy) { create(:taxonomy, name: 'Brand') }
+      let(:taxonomy_root) {
+        brand_taxonomy.root
+      }
       let(:brand_taxon) {
-        create(:taxon, name: 'EngineCommerce', taxonomy: brand_taxonomy)
+        taxon = create(:taxon, name: 'EngineCommerce')
+        taxon.move_to_child_of(taxonomy_root)
+        taxon
       }
 
       before do
@@ -189,6 +194,26 @@ describe Spree::ProductFeedService do
       end
 
       it { is_expected.to eq('EngineCommerce') }
+
+    end
+
+    context 'when product has a taxon with no taxonomy' do
+      let(:orphan_root) {
+        create(:taxon, name: 'Warbucks', taxonomy_id: nil)
+      }
+      let(:orphan_taxon) {
+        taxon = create(:taxon, name: 'Annie', taxonomy_id: nil)
+        taxon.move_to_child_of(orphan_root)
+        taxon
+      }
+
+      before do
+        product.taxons << orphan_taxon
+      end
+
+      it {
+        is_expected.to eq('')
+      }
     end
 
   end

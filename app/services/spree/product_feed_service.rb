@@ -120,7 +120,7 @@ module Spree
 
     def taxon_name_by_taxonomy(taxonomy_name)
       product.taxons.detect { |taxon|
-        taxon.taxonomy.name == taxonomy_name
+        taxon.taxonomy&.name == taxonomy_name
       }.try(:name).to_s
     end
 
