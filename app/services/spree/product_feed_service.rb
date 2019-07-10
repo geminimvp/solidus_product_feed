@@ -62,7 +62,12 @@ module Spree
     end
 
     def mpn
-      property_value_by_name('MPN').to_s.downcase
+      mpn = property_value_by_name('MPN').to_s.downcase
+      if mpn.blank?
+        variant.sku
+      else
+        mpn
+      end
     end
 
     def product_type

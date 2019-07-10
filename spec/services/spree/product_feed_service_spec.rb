@@ -233,7 +233,17 @@ describe Spree::ProductFeedService do
   describe '#mpn' do
     subject { service.mpn }
 
-    it { is_expected.to eq('1') }
+    context 'when mpn is present' do
+      it { is_expected.to eq('1') }
+    end
+
+    context 'when mpn is missing' do
+      before do
+        Spree::Property.find_by(name: 'MPN').destroy!
+      end
+
+      it { is_expected.to eq(variant.sku) }
+    end
   end
 
   describe '#product_type' do
