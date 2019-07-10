@@ -25,6 +25,7 @@ module Spree
           availability
           condition
           price
+          mpn
           link
           image_link
           brand
@@ -53,6 +54,7 @@ module Spree
           item.availability, # availability
           'new', # condition
           item.price.money.format(symbol: false, with_currency: true), # price
+          item.mpn, # returns mpn if present, sku if blank
           item.url, # link
           item.image_link, # image_link
           item.brand, # brand
