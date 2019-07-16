@@ -27,7 +27,7 @@ module Spree
     end
 
     def url
-      base_url = "#{store.url}/#{product.slug}"
+      base_url = "#{store.url}/products/#{product.slug}"
 
       if base_url =~ /\Ahttp/
         base_url

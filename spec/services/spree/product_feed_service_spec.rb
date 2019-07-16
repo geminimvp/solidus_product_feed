@@ -87,10 +87,10 @@ describe Spree::ProductFeedService do
   describe '#url' do
     subject { service.url }
 
-    it { is_expected.to eq("https://#{store.url}/#{product.slug}") }
+    it { is_expected.to eq("https://#{store.url}/products/#{product.slug}") }
     context 'when store URL already includes protocol' do
       let(:store_url) { 'https://example.com' }
-      it { is_expected.to eq("#{store.url}/#{product.slug}") }
+      it { is_expected.to eq("#{store.url}/products/#{product.slug}") }
     end
   end
 
