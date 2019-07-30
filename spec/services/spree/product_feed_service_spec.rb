@@ -52,10 +52,6 @@ describe Spree::ProductFeedService do
            option_values: [size_option_value, color_option_value])
   end
 
-  let!(:variant_image) do
-    variant.images.create!(attachment_file_name: 'hams.png')
-  end
-
   let(:service) { described_class.new(variant) }
 
   describe '#id' do
@@ -141,19 +137,30 @@ describe Spree::ProductFeedService do
     }
 
     context 'when the variant has images' do
-      it { is_expected.to match(image_path_regex) }
-    end
-
-    context 'when the product has images' do
-      before do
-        allow_any_instance_of(Spree::Variant).to receive(:images).and_return([])
-        allow_any_instance_of(Spree::Product).to receive(:images).and_return([product_image])
+      let!(:variant_image) do
+        variant.images.create!(attachment_file_name: 'hams.png')
       end
 
       it { is_expected.to match(image_path_regex) }
     end
 
-    context "when the product an variant don't have images" do
+    context 'when the product has images' do
+      it { is_expected.to match(image_path_regex) }
+
+      context 'and the display image is not the first image added' do
+        let!(:image_2) {
+          Spree::Image.create!(viewable: product.master, attachment_file_name: 'sausages.png')
+        }
+
+        before do
+          product.reload.images.last.move_higher
+        end
+
+        it { is_expected.to match(%r/sausages.png/) }
+      end
+    end
+
+    context "when the product and variant don't have images" do
       before do
         allow_any_instance_of(Spree::Product).to receive(:images).and_return([])
         allow_any_instance_of(Spree::Variant).to receive(:images).and_return([])
