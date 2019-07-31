@@ -112,16 +112,7 @@ module Spree
     end
 
     def item_product_feed_image_link(item)
-      item_product_feed_image(item)&.attachment&.url(:large)
-    end
-
-    # Determine which image to use for this variant/product in the feed
-    def item_product_feed_image(item)
-      if item.images.present?
-        item.images.order(:position).first
-      elsif item&.product&.present?
-        item.product.display_image
-      end
+      item.try(:images).first.try(:attachment).try(:url, :large)
     end
 
     private
