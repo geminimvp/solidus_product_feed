@@ -8,5 +8,5 @@
 
 <%= form_for [:admin, @product_feed], html: { class: "new_product_feed product-feed-form-container" } do |f| %>
   <%= render partial: "form", locals: { f: f, action: "new_product_feed" } %>
-  <%= render partial: "spree/admin/shared/new_resource_links" %>
+  <%= render partial: "spree/admin/shared/edit_resource_links", locals: { collection_url: admin_stores_url } %>
 <% end %>
