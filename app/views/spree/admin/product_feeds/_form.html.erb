@@ -1,5 +1,5 @@
 <fieldset class='form-group no-border-bottom no-border-top' data-hook='edit_product_feed'>
-  <div class='row'>
+  <div class='row mb-4'>
     <div class='col-4' data-hook='admin_product_feed_name'>
       <%= f.field_container :name do %>
         <%= f.label :name, class: "required" %>
@@ -15,11 +15,8 @@
             { prompt: '' },
             class: "fullwidth select2",
             required: true if @product_catalogs.any? %>
+        <%= link_to t("spree.new_product_catalog"), new_admin_product_catalog_path, class: "btn btn-secondary" %>
       <% end %>
-
-      <span>
-        <%= link_to t("spree.new_product_catalog"), new_admin_product_catalog_path %>
-      </span>
     </div>
 
     <div class='col-4' data-hook='admin_product_feed_url'>
