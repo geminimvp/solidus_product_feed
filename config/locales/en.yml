@@ -2,7 +2,7 @@ en:
   spree:
     admin:
       tab:
-        product_feeds: Product Feed
+        product_feeds: Product Feeds
         product_catalogs: Product Catalogs
         product_feed_images: Product Feed Images
       tab_description:
@@ -20,7 +20,7 @@ en:
     edit_product_catalog_image: Edit Product Catalog Image
     edit_product_feed_image: Edit Product Feed Image
     select_all: Select All
-    total_of_products: Total of Products
+    product_count: Product Count
     product_link: Click here to go to product
 
     product_feed:

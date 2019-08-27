@@ -1,7 +1,7 @@
 <fieldset class='form-group no-border-top' data-hook='edit_product_catalog'>
   <div class='row'>
     <div class='col-4' data-hook='admin_product_catalog_form_name'>
-      <%= f.field_container :name do %>
+      <%= f.field_container :name, class: ['pt-0'] do %>
         <%= f.label :name, class: "required" %>
         <%= f.text_field :name, class: "fullwidth", required: true %>
       <% end %>

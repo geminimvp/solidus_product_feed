@@ -4,7 +4,18 @@
 <% admin_breadcrumb(link_to plural_resource_name(Spree::ProductCatalog), spree.admin_product_catalogs_path) %>
 <% admin_breadcrumb(@product_catalog.name) %>
 
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
 <%= render partial: "spree/shared/error_messages", locals: { target: @product_catalog } %>
+
+<% content_for :previous_page_item do %>
+  <div class="previous-page-item">
+    <%= link_to admin_product_catalogs_url, class: 'btn btn-secondary align-items-baseline' do %>
+      <i class="fa fa-chevron-left mr-2"></i>
+      <span class=''><%= I18n.t('spree.admin.tab.product_catalogs') %></span>
+    <% end %>
+  </div>
+<% end %>
 
 <%= form_for [:admin, @product_catalog], html: { class: "edit_product_catalog product-catalog-form-container" } do |f| %>
   <%= render partial: "form", locals: { f: f } %>
