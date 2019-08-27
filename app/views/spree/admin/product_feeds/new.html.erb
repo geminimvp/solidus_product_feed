@@ -6,7 +6,9 @@
 
 <%= render partial: "spree/shared/error_messages", locals: { target: @product_feed } %>
 
-<%= form_for [:admin, @product_feed], html: { class: "new_product_feed product-feed-form-container" } do |f| %>
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<%= form_for [:admin, @product_feed], html: { class: "new_product_feed product-feed-form-container mt-0" } do |f| %>
   <%= render partial: "form", locals: { f: f, action: "new_product_feed" } %>
-  <%= render partial: "spree/admin/shared/edit_resource_links", locals: { collection_url: admin_stores_url } %>
+  <%= render partial: "spree/admin/shared/new_resource_links", locals: { collection_url: admin_stores_url } %>
 <% end %>

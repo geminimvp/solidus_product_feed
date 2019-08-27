@@ -6,6 +6,17 @@
 
 <%= render partial: "spree/shared/error_messages", locals: { target: @product_catalog } %>
 
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :previous_page_item do %>
+  <div class="previous-page-item">
+    <%= link_to admin_product_catalogs_url, class: 'btn btn-secondary align-items-baseline' do %>
+      <i class="fa fa-chevron-left mr-2"></i>
+      <span class=''><%= I18n.t('spree.admin.tab.product_catalogs') %></span>
+    <% end %>
+  </div>
+<% end %>
+
 <%= form_for [:admin, @product_catalog] do |f| %>
   <%= render partial: "form", locals: { f: f, action: "new_product_catalog" } %>
   <%= render partial: "spree/admin/shared/new_resource_links" %>

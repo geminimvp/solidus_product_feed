@@ -1,26 +1,26 @@
-<fieldset class='form-group no-border-bottom no-border-top' data-hook='edit_product_feed'>
+<fieldset class='form-group no-border-bottom no-border-top pt-0' data-hook='edit_product_feed'>
   <div class='row mb-4'>
     <div class='col-4' data-hook='admin_product_feed_name'>
-      <%= f.field_container :name do %>
+      <%= f.field_container :name, class: ['pt-0'] do %>
         <%= f.label :name, class: "required" %>
         <%= f.text_field :name, class: "fullwidth", required: true %>
       <% end %>
     </div>
 
     <div class='col-4' data-hook='admin_product_feed_product_catalog_id'>
-      <%= f.field_container :product_catalog_id do %>
+      <%= f.field_container :product_catalog_id, class: ['pt-0'] do %>
         <%= f.label :product_catalog_id %><br />
         <%= f.select :product_catalog_id,
             options_from_collection_for_select(@product_catalogs, :id, :name, @object.product_catalog_id),
             { prompt: '' },
             class: "fullwidth select2",
             required: true if @product_catalogs.any? %>
-        <%= link_to t("spree.new_product_catalog"), new_admin_product_catalog_path, class: "btn btn-secondary" %>
+        <%= link_to t("spree.new_product_catalog"), new_admin_product_catalog_path, class: "btn btn-secondary mt-3" %>
       <% end %>
     </div>
 
     <div class='col-4' data-hook='admin_product_feed_url'>
-      <%= f.field_container :url do %>
+      <%= f.field_container :url, class: ['pt-0'] do %>
         <%= f.label :url %><br />
         <%= text_field_tag :url, "#{current_store.url}/products.rss", class: 'fullwidth', readonly: true, disabled: true %>
       <% end %>
@@ -29,7 +29,7 @@
 </fieldset>
 
 <% if @product_feed.persisted? %>
-  <fieldset class='form-group no-border-bottom no-border-top' data-hook='edit_product_feed_images'>
+  <fieldset class='form-group no-border-bottom no-border-top pt-0' data-hook='edit_product_feed_images'>
     <div class='row'>
       <div class='col-4' data-hook='image_color_fill'>
         <%= f.field_container :options do %>

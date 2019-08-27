@@ -1,11 +1,15 @@
 <% admin_breadcrumb(t('spree.settings')) %>
-<% admin_breadcrumb(plural_resource_name(Spree::ProductCatalog)) %>
+<% admin_breadcrumb(I18n.t('spree.admin.tab.product_catalogs')) %>
 
-<% content_for :page_actions do %>
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :header_actions do %>
   <% if can?(:create, Spree::ProductCatalog) %>
     <li>
-      <%= link_to t('spree.new_product_catalog'), new_object_url,
-        id: 'admin_new_product_catalog_link', class: 'btn btn-primary' %>
+      <%= link_to new_object_url, id: 'admin_new_product_catalog_link', class: 'btn btn-primary' do %>
+        <i class="fa fa-plus mr-2"></i>
+        <span><%= I18n.t('spree.new_product_catalog') %></span>
+      <% end %>
     </li>
   <% end %>
 <% end %>
@@ -14,13 +18,6 @@
 
 <% if @product_catalogs.any? %>
   <table class='index' id='listing_product_catalogs' data-hook>
-    <colgroup>
-      <col style='width: 20%' />
-      <col style='width: 10%' />
-      <col style='width: 15%' />
-      <col style='width: 10%' />
-    </colgroup>
-
     <thead>
       <tr data-hook='product_catalogs_header'>
         <th>
@@ -28,7 +25,7 @@
           Spree::ProductCatalog.human_attribute_name(:name),
           title: 'product_catalogs_order_by_name_title' %>
         </th>
-        <th><%= t('spree.total_of_products') %></th>
+        <th><%= t('spree.product_count') %></th>
         <th><%= Spree::ProductCatalog.human_attribute_name(:created_at) %></th>
         <th class='actions'></th>
       </tr>
@@ -43,10 +40,16 @@
           <td><%= pretty_time(product_catalog.created_at) %></td>
           <td class='actions'>
             <% if can?(:update, product_catalog) %>
-              <%= link_to_edit product_catalog, no_text: true %>
+              <%= link_to edit_admin_product_catalog_path(product_catalog), class: 'btn btn-sm btn-secondary' do %>
+                <i class="fa fa-pencil mr-2"></i>
+                <%= I18n.t('spree.actions.edit') %>
+              <% end %>
             <% end %>
             <% if can?(:destroy, product_catalog) %>
-              <%= link_to_delete product_catalog, no_text: true %>
+              <%= link_to admin_product_catalog_path(product_catalog), method: :delete, data: { confirm: 'Are you sure?' }, class: 'delete-resource btn btn-sm btn-secondary' do %>
+                <i class="fa fa-trash mr-2"></i>
+                <%= I18n.t('spree.actions.delete') %>
+              <% end %>
             <% end %>
           </td>
         </tr>

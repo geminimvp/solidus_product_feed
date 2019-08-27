@@ -6,7 +6,20 @@
 
 <%= render partial: "spree/shared/error_messages", locals: { target: @product_feed } %>
 
-<%= form_for [:admin, @product_feed], method: :put, html: { class: "edit_product_feed product-feed-form-container" } do |f| %>
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :header_actions do %>
+  <% if can?(:create, Spree::ProductFeed) %>
+    <li>
+      <%= link_to new_object_url, id: 'admin_new_product_catalog_link', class: 'btn btn-primary' do %>
+        <i class="fa fa-plus mr-2"></i>
+        <span><%= I18n.t('spree.new_product_feed') %></span>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
+
+<%= form_for [:admin, @product_feed], method: :put, html: { class: "edit_product_feed product-feed-form-container mt-0" } do |f| %>
   <%= render partial: "form", locals: { f: f } %>
   <%= render partial: "spree/admin/shared/edit_resource_links" %>
 <% end %>
