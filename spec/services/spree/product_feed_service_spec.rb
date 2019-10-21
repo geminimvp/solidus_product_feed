@@ -199,10 +199,13 @@ describe Spree::ProductFeedService do
 
     context 'when product has a taxon with no taxonomy' do
       let(:orphan_root) {
-        create(:taxon, name: 'Warbucks', taxonomy_id: nil)
+        oroot = create(:taxon, name: 'Warbucks')
+        oroot.update_columns(taxonomy_id: nil)
+        oroot
       }
       let(:orphan_taxon) {
-        taxon = create(:taxon, name: 'Annie', taxonomy_id: nil)
+        taxon = create(:taxon, name: 'Annie')
+        taxon.update_columns(taxonomy_id: nil)
         taxon.move_to_child_of(orphan_root)
         taxon
       }
