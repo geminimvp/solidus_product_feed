@@ -9,13 +9,8 @@ Spree::ProductsController.prepend(Module.new do
     load_feed_products if (request.format.rss? || request.format.xml?)
 
     respond_to do |format|
-      if product_feed
-        format.rss { render inline: xml.generate, layout: false }
-        format.xml { render inline: xml.generate, layout: false }
-      else
-        format.rss { redirect_to action: 'index' }
-        format.xml { redirect_to action: 'index' }
-      end
+      format.rss { render inline: xml.generate, layout: false }
+      format.xml { render inline: xml.generate, layout: false }
       format.html { super }
     end
   end
@@ -23,9 +18,23 @@ Spree::ProductsController.prepend(Module.new do
   private
 
   def load_feed_products
-    product_catalog = product_feed.try(:product_catalog)
-    item_ids = product_catalog ? product_catalog.item_ids : []
     @feed_products = Spree::Variant.where(id: item_ids)
+  end
+
+  def item_ids
+    if product_catalog
+      product_catalog.item_ids
+    else
+      all_variant_ids
+    end
+  end
+
+  def all_variant_ids
+    Spree::Variant.pluck(:id)
+  end
+
+  def product_catalog
+    @product_catalog ||= product_feed.try(:product_catalog)
   end
 
   def product_feed
