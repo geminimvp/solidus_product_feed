@@ -6,10 +6,11 @@ gem 'solidus_auth_devise'
 gem 'deface'
 
 if branch == 'master' || branch >= 'v2.3'
-  gem 'rails', '~> 5.1.4'
+  gem 'rails', '~> 5.2.0'
 elsif branch >= 'v2.0'
   gem 'rails', '~> 5.0.6'
 end
+gem 'sprockets', '< 4.0.0'
 
 gem 'mysql2', '~> 0.4.10'
 gem 'pg', '~> 0.21'
