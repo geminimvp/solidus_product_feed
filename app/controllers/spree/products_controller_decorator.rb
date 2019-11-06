@@ -1,7 +1,8 @@
 Spree::ProductsController.prepend(Module.new do
   class << self
     def prepended(klass)
-      klass.respond_to :rss, :xml, only: :index
+      klass.respond_to :html, :rss, :xml, only: :index
+      klass.before_action :default_format_html
     end
   end
 
@@ -9,9 +10,9 @@ Spree::ProductsController.prepend(Module.new do
     load_feed_products if (request.format.rss? || request.format.xml?)
 
     respond_to do |format|
+      format.all { super }
       format.rss { render inline: xml.generate, layout: false }
       format.xml { render inline: xml.generate, layout: false }
-      format.html { super }
     end
   end
 
@@ -47,5 +48,12 @@ Spree::ProductsController.prepend(Module.new do
 
   def xml
     @xml ||= Spree::Feeds::XML.new(@feed_products, current_store)
+  end
+
+  # Force `*/*` requests to be interpreted as HTML
+  def default_format_html
+    if params[:format].blank?
+      request.format = "html"
+    end
   end
 end)

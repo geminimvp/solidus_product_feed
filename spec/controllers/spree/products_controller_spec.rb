@@ -63,6 +63,24 @@ describe Spree::ProductsController do
         end
       end
 
+      context 'as anything' do
+        subject { get :index, params: {} }
+
+        before do
+          request.headers['Accept'] = '*/*'
+        end
+
+        it 'returns the correct http code' do
+          is_expected.to have_http_status :ok
+        end
+
+        it 'returns the correct content type' do
+          subject
+          expect(response.content_type).to eq 'text/html'
+        end
+
+      end
+
     end
 
     context 'as html' do
