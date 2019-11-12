@@ -1,47 +1,45 @@
 require 'i18n'
-require 'builder'
+require 'ox'
 
 module Spree
   module Feeds
     class XML < Spree::Feeds::Base
       def generate
-        xml.instruct! :xml, version: '1.0'
-
-        xml.rss version: '2.0', 'xmlns:g' => 'http://base.google.com/ns/1.0' do
-          xml.channel do
-            xml.title store.name
-            xml.link store.url
-            xml.description "Find out about new products on http://#{store.url} first!"
-            variants.includes(variants_includes).find_each(batch_size: 100) do |variant|
-              item = Spree::ProductFeedService.new(variant, store)
-              xml.item do
-                xml.tag! 'g:id', item.id
-                xml.tag! 'g:title', item.title
-                xml.tag! 'g:description', item.description
-                xml.tag! 'g:link', item.url
-                xml.tag! 'g:image_link', item.image_link
-                xml.tag! 'g:brand', item.brand
-                xml.tag! 'g:condition', item.condition
-                xml.tag! 'g:availability', item.availability
-                xml.tag! 'g:price', item.price.money.format(symbol: false, with_currency: true)
-                xml.tag! 'g:mpn', item.mpn
-                xml.tag! 'g:item_group_id', item.item_group_id
-                xml.tag! 'g:google_product_category', item.google_product_category
-                xml.tag! 'g:custom_label_0', "Color: #{item.color}"
-                xml.tag! 'g:custom_label_1', "Gender: #{item.gender}"
-                xml.tag! 'g:custom_label_2', "Material: #{item.material}"
-                xml.tag! 'g:custom_label_3', "Product Type: #{item.product_type}"
-                xml.tag! 'g:custom_label_4', "Size: #{item.size}"
+        xml = Ox::Builder.new(indent: 2) { |b|
+          b.instruct(:xml, version: '1.0', encoding: 'UTF-8')
+          b.element('rss', version: '2.0', 'xmlns:g' => 'http://base.google.com/ns/1.0') do
+            b.element('channel') do
+              b.element('title') { b.text store.name }
+              b.element('link') { b.text store.url }
+              b.element('description') { b.text "Find out about new products on http://#{store.url} first!" }
+              variants.includes(variants_includes).references(:spree_taxonomies).find_each(batch_size: 100) do |variant|
+                product = fetch_product(variant.product_id)
+                fs_item = Spree::ProductFeedService.new(variant, store, product)
+                b.element('item') do
+                  b.element('g:id') { b.text fs_item.id }
+                  b.element('g:title') { b.text fs_item.title }
+                  b.element('g:description') { b.text(fs_item.description, true) }
+                  b.element('g:link') { b.text fs_item.url }
+                  b.element('g:image_link') { b.text fs_item.image_link }
+                  b.element('g:brand') { b.text fs_item.brand }
+                  b.element('g:condition') { b.text fs_item.condition }
+                  b.element('g:availability') { b.text fs_item.availability }
+                  b.element('g:price') { b.text fs_item.price.money.format(symbol: false, with_currency: true) }
+                  b.element('g:mpn') { b.text fs_item.mpn }
+                  b.element('g:item_group_id') { b.text fs_item.item_group_id }
+                  b.element('g:google_product_category') { b.text fs_item.google_product_category }
+                  b.element('g:custom_label_0') { b.text "Color: #{fs_item.color}" }
+                  b.element('g:custom_label_1') { b.text "Gender: #{fs_item.gender}" }
+                  b.element('g:custom_label_2') { b.text "Material: #{fs_item.material}" }
+                  b.element('g:custom_label_3') { b.text "Product Type: #{fs_item.product_type}" }
+                  b.element('g:custom_label_4') { b.text "Size: #{fs_item.size}" }
+                end
               end
             end
           end
-        end
-      end
+        }
 
-      private
-
-      def xml
-        @xml ||= Builder::XmlMarkup.new(indent: 2)
+        xml
       end
     end
   end

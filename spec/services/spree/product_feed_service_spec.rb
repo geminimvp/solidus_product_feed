@@ -146,8 +146,8 @@ describe Spree::ProductFeedService do
 
     context 'when the product has images' do
       before do
-        allow_any_instance_of(Spree::Variant).to receive(:images).and_return([])
-        allow_any_instance_of(Spree::Product).to receive(:images).and_return([product_image])
+        allow(variant).to receive(:images) { [] }
+        allow(product.master).to receive(:images) { [product_image] }
       end
 
       it { is_expected.to match(image_path_regex) }
@@ -155,8 +155,10 @@ describe Spree::ProductFeedService do
 
     context "when the product an variant don't have images" do
       before do
-        allow_any_instance_of(Spree::Product).to receive(:images).and_return([])
-        allow_any_instance_of(Spree::Variant).to receive(:images).and_return([])
+        allow(variant).to receive(:images) { [] }
+        allow(variant).to receive(:display_image) { nil }
+        allow(product.master).to receive(:images) { [] }
+        allow(product.master).to receive(:display_image) { nil }
       end
 
       it { is_expected.to be_nil }
