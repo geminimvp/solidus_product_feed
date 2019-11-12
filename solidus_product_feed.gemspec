@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'solidus', solidus_version
   s.add_dependency 'solidus_support'
   s.add_dependency 'deface'
+  s.add_dependency 'ox'
 
   s.add_development_dependency 'capybara', '~> 2.18'
   s.add_development_dependency 'poltergeist'

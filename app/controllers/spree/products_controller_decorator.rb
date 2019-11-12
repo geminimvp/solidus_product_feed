@@ -19,7 +19,11 @@ Spree::ProductsController.prepend(Module.new do
   private
 
   def load_feed_products
-    @feed_products = Spree::Variant.where(id: item_ids)
+    @feed_products = if product_catalog
+                       Spree::Variant.where(id: item_ids)
+                     else
+                       Spree::Variant.available
+                     end
   end
 
   def item_ids

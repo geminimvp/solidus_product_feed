@@ -2,12 +2,20 @@ module Spree
   class ProductFeedService
     include Rails.application.routes.url_helpers
 
-    attr_reader :product, :variant, :store
+    attr_reader :variant, :store
 
-    def initialize(variant, store = Spree::Store.default)
+    def initialize(variant, store = Spree::Store.default, product = nil)
       @variant = variant
-      @product = variant.product
       @store = store
+      @product = product
+    end
+
+    def product
+      @product ||= variant.product
+    end
+
+    def master
+      @master ||= product.master
     end
 
     def id
@@ -15,15 +23,15 @@ module Spree
     end
 
     def slug
-      product.try(:slug)
+      product.slug
     end
 
     def title
-      product.try(:name)
+      product.name
     end
 
     def description
-      product.try(:description)
+      product.description
     end
 
     def url
@@ -50,7 +58,7 @@ module Spree
     end
 
     def brand
-      taxon_name_by_taxonomy('Brand')
+      product.brand_taxon&.name.to_s
     end
 
     def material
@@ -97,22 +105,22 @@ module Spree
 
     def image_link
       if image_link_base =~ /\Ahttp/
-        return image_link_base
+        image_link_base
       elsif image_link_base.present?
-        return "https://#{store.url}#{image_link_base}"
+        "https://#{store.url}#{image_link_base}"
       end
     end
 
     def image_link_base
-      if variant.images.any?
-        item_product_feed_image_link(variant)
-      elsif product.images.any?
-        item_product_feed_image_link(product)
+      if variant.first_image
+        item_product_feed_image_link(variant.first_image)
+      else
+        item_product_feed_image_link(master.first_image)
       end
     end
 
-    def item_product_feed_image_link(item)
-      item.try(:images).first.try(:attachment).try(:url, :large)
+    def item_product_feed_image_link(image)
+      image&.attachment&.url(:large)
     end
 
     private
