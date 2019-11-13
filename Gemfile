@@ -5,10 +5,10 @@ gem 'solidus', github: 'solidusio/solidus', branch: branch
 gem 'solidus_auth_devise'
 gem 'deface'
 
-if branch == 'master' || branch >= 'v2.3'
+if branch == 'master' || branch >= 'v2.6'
   gem 'rails', '~> 5.2.0'
-elsif branch >= 'v2.0'
-  gem 'rails', '~> 5.0.6'
+elsif branch >= 'v2.4'
+  gem 'rails', '~> 5.1.0'
 end
 gem 'sprockets', '< 4.0.0'
 
