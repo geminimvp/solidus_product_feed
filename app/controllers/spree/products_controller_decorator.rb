@@ -3,14 +3,15 @@ Spree::ProductsController.prepend(Module.new do
     def prepended(klass)
       klass.respond_to :html, :rss, :xml, only: :index
       klass.before_action :default_format_html
+      klass.before_action :load_feed_products, only: :index
     end
   end
 
   def index
-    load_feed_products if (request.format.rss? || request.format.xml?)
+    super
 
     respond_to do |format|
-      format.all { super }
+      format.all { }
       format.rss { render inline: xml.generate, layout: false }
       format.xml { render inline: xml.generate, layout: false }
     end
@@ -19,11 +20,13 @@ Spree::ProductsController.prepend(Module.new do
   private
 
   def load_feed_products
-    @feed_products = if product_catalog
-                       Spree::Variant.where(id: item_ids)
-                     else
-                       Spree::Variant.available
-                     end
+    if request.format.rss? || request.format.xml?
+      @feed_products = if product_catalog
+                         Spree::Variant.where(id: item_ids)
+                       else
+                         Spree::Variant.available
+                       end
+    end
   end
 
   def item_ids
