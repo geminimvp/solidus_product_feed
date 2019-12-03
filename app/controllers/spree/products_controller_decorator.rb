@@ -1,6 +1,7 @@
 Spree::ProductsController.prepend(Module.new do
   class << self
     def prepended(klass)
+      klass.include ActionController::Live
       klass.respond_to :html, :rss, :xml, only: :index
       klass.before_action :default_format_html
     end
@@ -11,12 +12,20 @@ Spree::ProductsController.prepend(Module.new do
 
     respond_to do |format|
       format.all { super }
-      format.rss { render inline: xml.generate, layout: false }
-      format.xml { render inline: xml.generate, layout: false }
+      format.rss { render_xml_feed(response) }
+      format.xml { render_xml_feed(response) }
     end
   end
 
   private
+
+  def render_xml_feed(response)
+    response.stream.write xml.doc_header
+    xml.write_elements(response.stream)
+    response.stream.write xml.doc_footer
+
+    response.stream.close
+  end
 
   def load_feed_products
     @feed_products = if product_catalog
