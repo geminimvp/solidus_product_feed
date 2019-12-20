@@ -1,3 +1,10 @@
+# frozen_string_literal: true
+
+module SolidusProductFeed
+  module Factories
+  end
+end
+
 FactoryBot.define do
   factory :product_feed, class: Spree::ProductFeed do
     name { 'A100' }

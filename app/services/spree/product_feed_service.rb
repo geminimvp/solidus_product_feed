@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class ProductFeedService
     include Rails.application.routes.url_helpers
@@ -22,27 +24,22 @@ module Spree
       variant.sku
     end
 
-    def slug
-      product.slug
-    end
+    delegate :slug, to: :product
 
     def title
       product.name
     end
 
-    def description
-      product.description
-    end
+    delegate :description, to: :product
 
     def url
       base_url = "#{store.url}/products/#{product.slug}"
 
-      if base_url =~ /\Ahttp/
+      if base_url&.start_with?('http')
         base_url
       else
         "https://#{base_url}"
       end
-
     end
 
     def color
@@ -71,11 +68,7 @@ module Spree
 
     def mpn
       mpn = property_value_by_name('MPN').to_s.downcase
-      if mpn.blank?
-        variant.sku
-      else
-        mpn
-      end
+      mpn.presence || variant.sku
     end
 
     def product_type
@@ -104,7 +97,7 @@ module Spree
     end
 
     def image_link
-      if image_link_base =~ /\Ahttp/
+      if image_link_base&.start_with?('http')
         image_link_base
       elsif image_link_base.present?
         "https://#{store.url}#{image_link_base}"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
     class ProductCatalogImagesController < ResourceController
@@ -11,7 +13,7 @@ module Spree
           else
             flash[:error] = t('spree.admin.product_feed_image.error_uploaded')
           end
-        rescue
+        rescue StandardError
           flash[:error] = t('spree.admin.product_feed_image.error_uploaded')
         end
 
@@ -40,7 +42,7 @@ module Spree
 
       def build_image
         if @variant.product_feed_image.present?
-          @variant.product_feed_image.update_attributes(permitted_resource_params[:image])
+          @variant.product_feed_image.update(permitted_resource_params[:image])
           @variant.product_feed_image
         else
           @variant.images.new(permitted_resource_params[:image].merge(viewable: @product_catalog))

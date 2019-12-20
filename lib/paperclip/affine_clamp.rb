@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Paperclip
   class AffineClamp < Paperclip::Processor
     # Handles watermarking of images that are uploaded.using affine clamp
@@ -9,7 +11,7 @@ module Paperclip
     # image_id: ID of Spree::ProductFeed to find overlay_image object
 
     attr_accessor :current_geometry, :target_geometry, :format, :whiny,
-                  :convert_options, :position, :image_id, :overlay_path
+      :convert_options, :position, :image_id, :overlay_path
 
     def initialize(file, options = {}, attachment = nil)
       super

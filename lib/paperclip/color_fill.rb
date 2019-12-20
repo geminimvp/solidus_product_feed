@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Paperclip
   class ColorFill < Paperclip::Processor
     # Handles watermarking of images that are uploaded.
@@ -10,7 +12,7 @@ module Paperclip
     # image_id: ID of Spree::ProductFeed to find overlay_image object
 
     attr_accessor :current_geometry, :target_geometry, :format, :whiny,
-                  :convert_options, :crop, :image_id, :color, :overlay_path
+      :convert_options, :crop, :image_id, :color, :overlay_path
 
     def initialize(file, options = {}, attachment = nil)
       super

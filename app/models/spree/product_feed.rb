@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Spree
   class ProductFeed < Spree::Base
     serialize :options, JSON
     belongs_to :store
     belongs_to :product_catalog
 
-    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::Image'
-    has_one :overlay_image, dependent: :destroy, class_name: 'Spree::Image', foreign_key: :overlay_image_id
+    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::Image', inverse_of: :viewable
+    has_one :overlay_image, dependent: :destroy, class_name: 'Spree::Image', foreign_key: :overlay_image_id, inverse_of: :viewable
 
     validates :name, presence: true, uniqueness: true
 

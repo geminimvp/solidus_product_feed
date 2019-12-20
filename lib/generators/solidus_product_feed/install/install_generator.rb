@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusProductFeed
   module Generators
     class InstallGenerator < Rails::Generators::Base
@@ -21,7 +23,7 @@ module SolidusProductFeed
         if run_migrations
           run 'rake db:migrate'
         else
-          puts "Skipping rake db:migrate, don't forget to run it!"
+          logger.warn "Skipping rake db:migrate, don't forget to run it!"
         end
       end
     end

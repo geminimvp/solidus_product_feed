@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
     class ProductFeedsController < ResourceController
@@ -17,6 +19,14 @@ module Spree
         else
           render :new
         end
+      end
+
+      def create
+        super
+      end
+
+      def edit
+        super
       end
 
       private

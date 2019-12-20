@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/factories'
 require 'spree/testing_support/controller_requests'

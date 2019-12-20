@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
     class ProductCatalogsController < ResourceController
@@ -5,6 +7,12 @@ module Spree
       before_action :load_variants, only: [:edit]
 
       include Spree::Admin::ProductCatalogsHelper
+
+      def index; end
+
+      def edit
+        super
+      end
 
       private
 
