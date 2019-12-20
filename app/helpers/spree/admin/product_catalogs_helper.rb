@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
     module ProductCatalogsHelper
-      def set_product_feed_image(variant, product_catalog)
+      def set_product_feed_image(variant, _product_catalog)
         return variant.images.first unless variant.product_feed_image
 
         variant.product_feed_image

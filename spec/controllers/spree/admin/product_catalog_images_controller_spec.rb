@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Spree
@@ -16,7 +18,7 @@ module Spree
       I18n.t('spree.admin.product_feed_image.error_uploaded')
     end
 
-    context '#update' do
+    describe '#update' do
       it 'updates an image' do
         post :update, params: {
           product_catalog_id: product_catalog.id,
@@ -29,9 +31,10 @@ module Spree
           }
         }
 
-        expect(response.status).to eq(302)
-        expect(response).to be_redirect
-        expect(flash[:success]).to eq(success_message)
+        aggregate_failures do
+          expect(response).to be_redirect
+          expect(flash[:success]).to eq(success_message)
+        end
       end
 
       it 'returns an error' do
@@ -46,9 +49,10 @@ module Spree
           }
         }
 
-        expect(response.status).to eq(302)
-        expect(response).to be_redirect
-        expect(flash[:error]).to eq(error_message)
+        aggregate_failures do
+          expect(response).to be_redirect
+          expect(flash[:error]).to eq(error_message)
+        end
       end
     end
   end

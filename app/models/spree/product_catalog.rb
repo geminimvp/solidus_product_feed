@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Spree
   class ProductCatalog < Spree::Base
     serialize :item_ids, Array
 
     belongs_to :store
-    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::Image'
+    has_many :images, -> { order(:position) }, as: :viewable, dependent: :destroy, class_name: 'Spree::Image', inverse_of: :product_catalog
 
     after_create :populate_default_items
 
@@ -24,7 +26,8 @@ module Spree
 
     def populate_default_items
       variants = Spree::Product.all.map(&:variants_including_master).flatten
-      update_attribute(:item_ids, variants.map(&:id).map(&:to_s))
+      variant_ids = variants.map { |pv| pv.id.to_s }
+      update(item_ids: variant_ids)
     end
   end
 end

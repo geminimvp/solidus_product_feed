@@ -1,30 +1,25 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Spree
   module Feeds
-    RSpec.describe XML, type: :model do
+    RSpec.describe Xml, type: :model do
       let(:generator) { described_class.new(feed_products, store) }
       let(:store) {
         create(:store, url: 'www.mysite.com', name: 'Extra Cool Store')
       }
       let(:feed_products) { Spree::Variant.available }
-      let!(:variant) { create(:variant) }
+      let(:variant) { create(:variant) }
 
       describe '#doc_header' do
         subject { generator.doc_header }
 
-        it 'contains the site name' do
-          expect(subject).to include('<title>Extra Cool Store</title>')
-        end
+        it { is_expected.to include('<title>Extra Cool Store</title>') }
 
-        it 'contains the site URL' do
-          expect(subject).to include('<link>www.mysite.com</link>')
-        end
+        it { is_expected.to include('<link>www.mysite.com</link>') }
 
-        it 'does not contain the split marker' do
-          expect(subject).to_not include('item_content')
-        end
-
+        it { is_expected.not_to include('item_content') }
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SolidusProductFeed
   class Configuration < Spree::Preferences::Configuration
     preference :formats, :hash, default: {

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Spree::Admin::ProductCatalogsController do
@@ -10,7 +12,7 @@ describe Spree::Admin::ProductCatalogsController do
   stub_authorization!
 
   describe 'GET #index' do
-    it 'should reuturns 200 status' do
+    it 'returns 200 status' do
       get :index
 
       expect(response).to be_ok
@@ -28,18 +30,15 @@ describe Spree::Admin::ProductCatalogsController do
       }
     end
 
-    subject do
+    before do
       post :create, params: params
     end
 
     it 'creates the product catalog' do
-      subject
-      expect(response.status).to eq(302)
       expect(assigns(:product_catalog)).not_to be_nil
     end
 
     it 'redirects to the edit page' do
-      subject
       expect(response).to redirect_to(edit_admin_product_catalog_path(assigns(:product_catalog)))
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Spree::ProductFeedService do
@@ -27,19 +29,11 @@ describe Spree::ProductFeedService do
     create(:option_value, name: 'Large', presentation: 'L', option_type: size_option_type)
   }
 
-  let!(:product_properties) do
-    create(:product_property, product: product, property: gender, value: 'Unisex')
-    create(:product_property, product: product, property: material, value: 'Cotton')
-    create(:product_property, product: product, property: google_product_category, value: 'Apparel & Accessories > Clothing')
-    create(:product_property, product: product, property: mpn, value: '1')
-    create(:product_property, product: product, property: type, value: 'Apparel & Accessories > Clothing')
-  end
-
   let(:product) do
     create(:product,
-           name: '2 Hams 20 Dollars',
-           description: 'As seen on TV!',
-           option_types: [size_option_type, color_option_type])
+      name: '2 Hams 20 Dollars',
+      description: 'As seen on TV!',
+      option_types: [size_option_type, color_option_type])
   end
 
   let!(:product_image) do
@@ -48,11 +42,11 @@ describe Spree::ProductFeedService do
 
   let(:variant) do
     create(:variant,
-           product: product,
-           option_values: [size_option_value, color_option_value])
+      product: product,
+      option_values: [size_option_value, color_option_value])
   end
 
-  let!(:variant_image) do
+  let(:variant_image) do
     variant.images.create!(attachment_file_name: 'hams.png')
   end
 
@@ -61,9 +55,7 @@ describe Spree::ProductFeedService do
   describe '#id' do
     subject { service.id }
 
-    it "delegates to the product's SKU" do
-      expect(subject).to eq(variant.sku)
-    end
+    it { is_expected.to eq(variant.sku) }
   end
 
   describe '#description' do
@@ -88,8 +80,10 @@ describe Spree::ProductFeedService do
     subject { service.url }
 
     it { is_expected.to eq("https://#{store.url}/products/#{product.slug}") }
+
     context 'when store URL already includes protocol' do
       let(:store_url) { 'https://example.com' }
+
       it { is_expected.to eq("#{store.url}/products/#{product.slug}") }
     end
   end
@@ -109,11 +103,11 @@ describe Spree::ProductFeedService do
   describe '#availability' do
     subject { service.availability }
 
-    context 'returns out of stock' do
+    context 'when item is out of stock' do
       it { is_expected.to eq('out of stock') }
     end
 
-    context 'returns in stock' do
+    context 'when item is in stock' do
       before do
         variant.stock_items.first.adjust_count_on_hand(1)
       end
@@ -123,7 +117,7 @@ describe Spree::ProductFeedService do
 
     context 'when inventory is not tracked' do
       before do
-        variant.update_attributes(track_inventory: false)
+        variant.update(track_inventory: false)
       end
 
       it { is_expected.to eq('in stock') }
@@ -137,7 +131,7 @@ describe Spree::ProductFeedService do
       'https://example.com/system/spree/images/attachments/\d*/\d*/\d*/large/hams.png'
     }
     let(:image_path_regex) {
-      %r|\A#{expected_image_path}\Z|
+      /\A#{expected_image_path}\Z/
     }
 
     context 'when the variant has images' do
@@ -146,19 +140,19 @@ describe Spree::ProductFeedService do
 
     context 'when the product has images' do
       before do
-        allow(variant).to receive(:images) { [] }
+        allow(variant).to receive(:images).and_return([])
         allow(product.master).to receive(:images) { [product_image] }
       end
 
       it { is_expected.to match(image_path_regex) }
     end
 
-    context "when the product an variant don't have images" do
+    context "when the product and variant don't have images" do
       before do
-        allow(variant).to receive(:images) { [] }
-        allow(variant).to receive(:display_image) { nil }
-        allow(product.master).to receive(:images) { [] }
-        allow(product.master).to receive(:display_image) { nil }
+        allow(variant).to receive(:images).and_return([])
+        allow(variant).to receive(:display_image).and_return(nil)
+        allow(product.master).to receive(:images).and_return([])
+        allow(product.master).to receive(:display_image).and_return(nil)
       end
 
       it { is_expected.to be_nil }
@@ -168,7 +162,11 @@ describe Spree::ProductFeedService do
   describe '#gender' do
     subject { service.gender }
 
-    it { is_expected.to eq('unisex') }
+    let!(:gender_product_property) {
+      create(:product_property, product: product, property: gender, value: 'Unisex')
+    }
+
+    it { is_expected.to eq(gender_product_property.value.downcase) }
   end
 
   describe '#size' do
@@ -196,10 +194,10 @@ describe Spree::ProductFeedService do
       end
 
       it { is_expected.to eq('EngineCommerce') }
-
     end
 
     context 'when product has a taxon with no taxonomy' do
+      # rubocop:disable Rails/SkipsModelValidations
       let(:orphan_root) {
         oroot = create(:taxon, name: 'Warbucks')
         oroot.update_columns(taxonomy_id: nil)
@@ -211,42 +209,48 @@ describe Spree::ProductFeedService do
         taxon.move_to_child_of(orphan_root)
         taxon
       }
+      # rubocop:enable Rails/SkipsModelValidations
 
       before do
         product.taxons << orphan_taxon
       end
 
-      it {
-        is_expected.to eq('')
-      }
+      it { is_expected.to eq('') }
     end
-
   end
 
   describe '#material' do
     subject { service.material }
 
-    it { is_expected.to eq('cotton') }
+    let!(:material_product_property) {
+      create(:product_property, product: product, property: material, value: 'Cotton')
+    }
+
+    it { is_expected.to eq(material_product_property.value.downcase) }
   end
 
   describe '#google_product_category' do
     subject { service.google_product_category }
 
-    it { is_expected.to eq('Apparel & Accessories > Clothing') }
+    let!(:category_product_property) {
+      create(:product_property, product: product, property: google_product_category, value: 'Apparel & Accessories > Clothing')
+    }
+
+    it { is_expected.to eq(category_product_property.value) }
   end
 
   describe '#mpn' do
     subject { service.mpn }
 
     context 'when mpn is present' do
-      it { is_expected.to eq('1') }
+      let!(:mpn_product_property) {
+        create(:product_property, product: product, property: mpn, value: '1')
+      }
+
+      it { is_expected.to eq(mpn_product_property.value) }
     end
 
     context 'when mpn is missing' do
-      before do
-        Spree::Property.find_by(name: 'MPN').destroy!
-      end
-
       it { is_expected.to eq(variant.sku) }
     end
   end
@@ -254,7 +258,11 @@ describe Spree::ProductFeedService do
   describe '#product_type' do
     subject { service.product_type }
 
-    it { is_expected.to eq('Apparel & Accessories > Clothing') }
+    let!(:type_product_property) {
+      create(:product_property, product: product, property: type, value: 'Apparel & Accessories > Clothing')
+    }
+
+    it { is_expected.to eq(type_product_property.value) }
   end
 
   describe '#color' do

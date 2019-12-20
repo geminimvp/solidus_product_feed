@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Spree::Admin::ProductFeedsController do
@@ -29,19 +31,17 @@ describe Spree::Admin::ProductFeedsController do
       }
     end
 
-    subject do
-      post :create, params: params
-    end
-
     it 'creates the product feed' do
-      subject
-      expect(response.status).to eq(302)
-      expect(assigns(:product_feed)).not_to be_nil
+      expect {
+        post :create, params: params
+      }.to change {
+        Spree::ProductFeed.count
+      }.by(1)
     end
 
     it 'redirects to the edit page' do
-      subject
-      expect(response).to redirect_to(edit_admin_product_feed_path(assigns(:product_feed)))
+      post :create, params: params
+      expect(response).to redirect_to(edit_admin_product_feed_path(assigns(:product_feed).id))
     end
   end
 end

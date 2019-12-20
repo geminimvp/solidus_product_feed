@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Deface::Override.new(
   virtual_path: 'spree/admin/shared/_settings_sub_menu',
   name: 'product_feed_submenu_admin_configurations_menu',
