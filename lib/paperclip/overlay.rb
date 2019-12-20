@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Paperclip
   class Overlay < Paperclip::Processor
     # Handles watermarking of images that are uploaded.
@@ -8,8 +10,8 @@ module Paperclip
     # overlay_path: the relative path of the image to use as overlay
 
     attr_accessor :current_geometry, :target_geometry, :format, :whiny,
-                  :convert_options, :base_path, :overlay_path, :position,
-                  :image_id
+      :convert_options, :base_path, :overlay_path, :position,
+      :image_id
 
     def initialize(file, options = {}, attachment = nil)
       super

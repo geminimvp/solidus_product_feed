@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module Feeds
     class Base
@@ -24,7 +26,7 @@ module Spree
 
       def fetch_product(product_id)
         if @products[product_id].blank?
-          @products[product_id] = Spree::Product.includes(:master, :brand_taxon, { product_properties: :property }).find_by(id: product_id)
+          @products[product_id] = Spree::Product.includes(:master, :brand_taxon, product_properties: :property).find_by(id: product_id)
         end
         @products[product_id]
       end

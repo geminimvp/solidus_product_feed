@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSpreeProductFeedsTable < SolidusSupport::Migration[4.2][5.0][5.1]
   def change
     create_table :spree_product_feeds do |t|

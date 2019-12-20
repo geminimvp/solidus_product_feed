@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'i18n'
 require 'ox'
 
 module Spree
   module Feeds
-    class XML < Spree::Feeds::Base
-
+    class Xml < Spree::Feeds::Base
       def doc_header
         doc_parts.first
       end

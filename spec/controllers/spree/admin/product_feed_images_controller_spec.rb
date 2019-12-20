@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Spree
@@ -10,54 +12,62 @@ module Spree
       product.master.images.create!(attachment: image('thinking-cat.jpg'))
     end
 
-    context '#create' do
-      it 'creates an image' do
-        post :create, params: {
+    describe '#create' do
+      let(:create_params) {
+        {
           product_feed_id: product_feed.id,
           product_feed_image: {
             image: {
-              attachment: upload_image('thinking-cat.jpg')
-            }
+              attachment: upload_image('thinking-cat.jpg'),
+            },
           }
         }
+      }
 
-        expect(response.status).to eq(302)
-        expect(response).to be_redirect
+      it 'creates an image' do
+        expect {
+          post :create, params: create_params
+        }.to change {
+          Spree::Image.count
+        }.by(1)
       end
 
       it 'creates an image as json' do
-        post :create, params: {
-          product_feed_id: product_feed.id,
-          product_feed_image: {
-            image: {
-              attachment: upload_image('thinking-cat.jpg')
-            }
-          }
-        }, format: :json
-
-        expect(response.status).to eq(200)
-        expect(json_response[0]['name']).to eq('thinking-cat.jpg')
+        expect {
+          post :create, params: create_params, format: :json
+        }.to change {
+          Spree::Image.count
+        }.by(1)
       end
     end
 
-    context '#destroy' do
-      it 'destroys an image' do
-        delete :destroy, params: {
+    describe '#destroy' do
+      let(:request_params) {
+        {
           product_feed_id: product_feed.id,
-          id: product_image.id
+          id: product_image.id,
         }
+      }
 
-        expect(response.status).to eq(302)
-        expect(response).to be_redirect
+      before do
+        # Ensure image exists first, so the count will change
+        product_image
+      end
+
+      it 'destroys an image' do
+        expect {
+          delete :destroy, params: request_params
+        }.to change {
+          Spree::Image.count
+        }.by(-1)
       end
 
       it 'destroys an image as json' do
-        delete :destroy, params: {
-          product_feed_id: product_feed.id,
-          id: product_image.id
-        }, format: :json
-
-        expect(response.status).to eq(200)
+        expect {
+          delete :destroy, params: request_params, format: :json
+        }.to change {
+          Spree::Image.count
+        }.by(-1)
       end
     end
   end
