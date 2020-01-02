@@ -6,6 +6,7 @@ require 'ox'
 module Spree
   module Feeds
     class Xml < Spree::Feeds::Base
+
       def doc_header
         doc_parts.first
       end

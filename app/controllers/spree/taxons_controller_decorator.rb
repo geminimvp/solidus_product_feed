@@ -33,7 +33,7 @@ Spree::TaxonsController.prepend(
     end
 
     def xml
-      @xml ||= Spree::Feeds::XML.new(@feed_products, current_store)
+      @xml ||= Spree::Feeds::Xml.new(@feed_products, current_store)
     end
 
     # Force `*/*` requests to be interpreted as HTML
