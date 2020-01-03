@@ -13,6 +13,8 @@ module Spree
 
     describe 'GET #show' do
       context 'when request is for XML' do
+        render_views
+
         it 'returns a properly formatted XML feed' do
           get :show, params: { id: taxon.permalink, format: :xml }
           aggregate_failures do
